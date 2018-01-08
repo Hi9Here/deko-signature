@@ -11,16 +11,81 @@
   <template>
     <style>:host {display:inline-block;color:#666}</style>
     <paper-cut elevation="1" style="display:block;padding:10px 0 0 10px;min-width:300px;margin: 10px;">
-      <img src="[[img]]">
+      <img src="[[item.img]]">
       <qr-code style="float:right;width:100px" background="#ffffff00" value="[[signature]]" size="100" level="L" ></qr-code>
-      <br>[[user]]
-      <br>[[profile]]
-      <br><date-display style="font-size:xx-small" value="[[date]]"></date-display>
-    </paper-cut>    
+      <br>[[item.user]]
+      <br>[[item.profile]]
+      <br><date-display style="font-size:xx-small" value="[[item.date]]"></date-display>
+    </paper-cut>
   </template>
 </dom-module>
 <script>
   Polymer({
     is: "deko-signature",
+    properties:{
+      item:{
+        computed: "setItem(signature, toTest)",
+      },
+    },
+    setItem: function(signature, toTest) {
+      var that = this
+      //get public keys
+      db.collection("Profiles").get().then(function(profiles) {
+        profiles.forEach(function(profile) {
+          var item = {
+            profile:profile.data().displayName,
+            img:profile.data().image,
+          }
+          profile.ref.collection("public key").get().then(function(keys) {
+            keys.forEach(function(doc) {
+              item.user = doc.data().displayName
+              verify(toTest, signature, doc.data()["Public key"], function(isValid) {
+                if (isValid) {
+                  that.set("item", item)
+                }
+              })
+            }}
+          })
+        })
+      })
+    },
   })
+
+function importKey(KeyAsJson,cb) {
+  var key = JSON.parse(KeyAsJson)
+  return window.crypto.subtle.importKey("jwk", key,{name: "ECDSA",namedCurve: "P-256"}, false,key.key_ops).then(function(key){
+    return cb(key)
+  }).then(function(ret){
+    return ret
+  }).catch(function(err){
+    console.error(err)
+  })
+} 
+function ab2str(buf) {
+  return String.fromCharCode.apply(null, new Uint16Array(buf));
+}
+function str2ab(str) {
+  var buf = new ArrayBuffer(str.length*2); // 2 bytes for each char
+  var bufView = new Uint16Array(buf);
+  for (var i=0, strLen=str.length; i < strLen; i++) {
+    bufView[i] = str.charCodeAt(i);
+  }
+  return buf
+}
+function base64ToArrayBuffer(s) {
+  var asciiString = window.atob(s)
+  return new Uint8Array([...asciiString].map(char => char.charCodeAt(0)))
+}
+function verify(string, signature, publicKey, cb) {
+  var data = str2ab(string)
+  importKey(publicKey,function(key){
+    window.crypto.subtle.verify({name: "ECDSA",hash: {name: "SHA-256"}}, key, base64ToArrayBuffer(signature), data 
+    ).then(function(isvalid){
+      //returns a boolean on whether the signature is true or not
+      cb(isvalid)
+    }).catch(function(err){
+      console.error(err)
+    })
+  })
+}
 </script>
