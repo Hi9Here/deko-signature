@@ -1,0 +1,21 @@
+{
+  "name": "deko-signature",
+  "version": "1.0.0",
+  "description": "\n    \n    \n    \n  ",
+  "main": "deko-signature.html",
+  "keywords": [
+    "polymer",
+    "web-components"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#~1.11.2",
+    "icon-icons": "*",
+    "qr-code": "*",
+    "date-display": "*",
+    "paper-cut": "alijaya/paper-cut#~0.0.1"
+  },
+  "devDependencies": {
+    "iron-test-helpers": "*",
+    "web-component-tester": "^5.0.0"
+  }
+}
