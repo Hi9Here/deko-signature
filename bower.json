@@ -1,7 +1,7 @@
 {
   "name": "deko-signature",
   "version": "1.0.0",
-  "description": "\n    \n    \n    \n  ",
+  "description": "signature",
   "main": "deko-signature.html",
   "keywords": [
     "polymer",
@@ -9,9 +9,8 @@
   ],
   "dependencies": {
     "polymer": "Polymer/polymer#~1.11.2",
-    "icon-icons": "*",
-    "qr-code": "*",
-    "date-display": "*",
+    "qr-code": "marcus7777/qr-code",
+    "date-display": "marcus7777/date-display",
     "paper-cut": "alijaya/paper-cut#~0.0.1"
   },
   "devDependencies": {
