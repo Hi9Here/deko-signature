@@ -42,6 +42,8 @@
               verify(toTest, signature, doc.data()["Public key"], function(isValid) {
                 if (isValid) {
                   that.set("item", item)
+                } else if (that.item && !that.item.profile) {
+                  that.set("item", {user: "not valid"})
                 }
               })
             })
