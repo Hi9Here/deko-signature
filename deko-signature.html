@@ -11,7 +11,9 @@
   <template>
     <style>:host {display:inline-block;color:#666}</style>
     <paper-cut elevation="2" style="background-image: url(/images/textured-paper.jpg);display: block;padding: 13px 0 0 13px;min-width: 301px;margin: 10px;text-align: left;">
-      <img src="[[item.img]]" style="max-width: 196px;max-height: 81px;">
+      <template is="dom-if" if="[[item.img]]">
+        <img src="[[item.img]]" style="max-width: 196px;max-height: 81px;">
+      </template>
       <qr-code style="float:right;width:100px" background="#ffffff00" value="[[signature]]" size="100" level="L" ></qr-code>
       <br>[[item.user]]
       <br>[[item.profile]]
@@ -34,11 +36,13 @@
         profiles.forEach(function(profile) {
           var item = {
             profile:profile.data().displayName,
-            img:profile.data().image,
+            img:profile.data().image || "https://cdn4.iconfinder.com/data/icons/commenly-needed/400/Icon-06-512.png",
           }
           profile.ref.collection("public key").get().then(function(keys) {
             keys.forEach(function(doc) {
-              item.user = doc.data().displayName
+              if (doc.data().displayName !== profile.data().displayName) {
+                item.user = doc.data().displayName
+              }
               verify(toTest, signature, doc.data()["Public key"], function(isValid) {
                 if (isValid) {
                   that.set("item", item)
