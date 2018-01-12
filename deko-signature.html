@@ -16,10 +16,10 @@
       </template>
       <template is="dom-if" if="[[item.profile]]">
         <qr-code style="float:right;width:100px" background="#ffffff00" value="[[signature]]" size="100" level="L" ></qr-code>
+        <br>[[item.user]]
+        <br>[[item.profile]]
+        <br><date-display style="font-size:xx-small" value="[[item.date]]"></date-display>
       </template>
-      <br>[[item.user]]
-      <br>[[item.profile]]
-      <br><date-display style="font-size:xx-small" value="[[item.date]]"></date-display>
     </paper-cut>
   </template>
 </dom-module>
