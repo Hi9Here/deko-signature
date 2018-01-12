@@ -10,17 +10,17 @@
 <dom-module id="deko-signature">
   <template>
     <style>:host {display:inline-block;color:#666}</style>
-    <paper-cut elevation="2" style="background-image: url(/images/textured-paper.jpg);display: block;padding: 13px 0 0 13px;min-width: 301px;margin: 10px;text-align: left;">
-      <template is="dom-if" if="[[item.img]]">
-        <img src="[[item.img]]" style="max-width: 196px;max-height: 81px;">
-      </template>
-      <template is="dom-if" if="[[item.profile]]">
+    <template is="dom-if" if="[[item.profile]]">
+      <paper-cut elevation="2" style="background-image: url(/images/textured-paper.jpg);display: block;padding: 13px 0 0 13px;min-width: 301px;margin: 10px;text-align: left;">
+        <template is="dom-if" if="[[item.img]]">
+          <img src="[[item.img]]" style="max-width: 196px;max-height: 81px;">
+        </template>
         <qr-code style="float:right;width:100px" background="#ffffff00" value="[[signature]]" size="100" level="L" ></qr-code>
         <br>[[item.user]]
         <br>[[item.profile]]
         <br><date-display style="font-size:xx-small" value="[[item.date]]"></date-display>
-      </template>
-    </paper-cut>
+      </paper-cut>
+    </template>
   </template>
 </dom-module>
 <script>
