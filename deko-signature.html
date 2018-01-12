@@ -14,7 +14,9 @@
       <template is="dom-if" if="[[item.img]]">
         <img src="[[item.img]]" style="max-width: 196px;max-height: 81px;">
       </template>
-      <qr-code style="float:right;width:100px" background="#ffffff00" value="[[signature]]" size="100" level="L" ></qr-code>
+      <template is="dom-if" if="[[item.profile]]">
+        <qr-code style="float:right;width:100px" background="#ffffff00" value="[[signature]]" size="100" level="L" ></qr-code>
+      </template>
       <br>[[item.user]]
       <br>[[item.profile]]
       <br><date-display style="font-size:xx-small" value="[[item.date]]"></date-display>
