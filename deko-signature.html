@@ -47,6 +47,7 @@
               }
               verify(toTest, signature, doc.data()["Public key"], function(isValid) {
                 if (isValid) {
+                  that.set("item", item)
                   document.body.querySelectorAll('#show > div.ql-editor > p').forEach(function (p) {
                     if (/^([a-zA-Z0-9+/]{86}==)$/g.test(p.innerHTML)) { 
                       var El = document.querySelector('#' + p.innerHTML.replace(/[0-9+/\=]/g, ''))
@@ -60,8 +61,6 @@
                       p.classList.add("signatures")
                     }
                   })
-              
-                  that.set("item", item)
                 } else if (that.item && !that.item.profile) {
                   that.set("item", {user: "not valid"})
                 }
