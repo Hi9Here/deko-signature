@@ -73,41 +73,41 @@
     },
   })
 
-function importKey(KeyAsJson,cb) {
-  var key = JSON.parse(KeyAsJson)
-  return window.crypto.subtle.importKey("jwk", key,{name: "ECDSA",namedCurve: "P-256"}, false,key.key_ops).then(function(key){
-    return cb(key)
-  }).then(function(ret){
-    return ret
-  }).catch(function(err){
-    console.error(err)
-  })
-} 
-function ab2str(buf) {
-  return String.fromCharCode.apply(null, new Uint16Array(buf))
-}
-function str2ab(str) {
-  var buf = new ArrayBuffer(str.length*2); // 2 bytes for each char
-  var bufView = new Uint16Array(buf);
-  for (var i=0, strLen=str.length; i < strLen; i++) {
-    bufView[i] = str.charCodeAt(i);
-  }
-  return buf
-}
-function base64ToArrayBuffer(s) {
-  var asciiString = window.atob(s)
-  return new Uint8Array([...asciiString].map(char => char.charCodeAt(0)))
-}
-function verify(string, signature, publicKey, cb) {
-  var data = str2ab(string)
-  importKey(publicKey,function(key){
-    window.crypto.subtle.verify({name: "ECDSA",hash: {name: "SHA-256"}}, key, base64ToArrayBuffer(signature), data 
-    ).then(function(isvalid){
-      //returns a boolean on whether the signature is true or not
-      cb(isvalid)
+  function importKey(KeyAsJson,cb) {
+    var key = JSON.parse(KeyAsJson)
+    return window.crypto.subtle.importKey("jwk", key,{name: "ECDSA",namedCurve: "P-256"}, false,key.key_ops).then(function(key){
+      return cb(key)
+    }).then(function(ret){
+      return ret
     }).catch(function(err){
       console.error(err)
     })
-  })
-}
+  } 
+  function ab2str(buf) {
+    return String.fromCharCode.apply(null, new Uint16Array(buf))
+  }
+  function str2ab(str) {
+    var buf = new ArrayBuffer(str.length*2); // 2 bytes for each char
+    var bufView = new Uint16Array(buf);
+    for (var i=0, strLen=str.length; i < strLen; i++) {
+      bufView[i] = str.charCodeAt(i);
+    }
+    return buf
+  }
+  function base64ToArrayBuffer(s) {
+    var asciiString = window.atob(s)
+    return new Uint8Array([...asciiString].map(char => char.charCodeAt(0)))
+  } 
+  function verify(string, signature, publicKey, cb) {
+    var data = str2ab(string)
+    importKey(publicKey,function(key){
+      window.crypto.subtle.verify({name: "ECDSA",hash: {name: "SHA-256"}}, key, base64ToArrayBuffer(signature), data 
+      ).then(function(isvalid){
+      //returns a boolean on whether the signature is true or not
+        cb(isvalid)
+      }).catch(function(err){
+        console.error(err)
+      })
+    })
+  }
 </script>
