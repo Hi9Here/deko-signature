@@ -47,6 +47,20 @@
               }
               verify(toTest, signature, doc.data()["Public key"], function(isValid) {
                 if (isValid) {
+                  document.body.querySelectorAll('#show > div.ql-editor > p').forEach(function (p) {
+                    if (/^([a-zA-Z0-9+/]{86}==)$/g.test(p.innerHTML)) { 
+                      var El = document.querySelector('#' + p.innerHTML.replace(/[0-9+/\=]/g, ''))
+                      if (El !== null && El.item) {
+                        p.classList.add("green")
+                        p.innerHTML = '[Signed by ' + document.querySelector('#' + p.innerHTML.replace(/[0-9+/\=]/g, '')).item.profile + ']'
+                      } else {
+                        p.classList.add("red")
+                        p.innerHTML = '[Not a valid signature]'
+                      }
+                      p.classList.add("signatures")
+                    }
+                  })
+              
                   that.set("item", item)
                 } else if (that.item && !that.item.profile) {
                   that.set("item", {user: "not valid"})
